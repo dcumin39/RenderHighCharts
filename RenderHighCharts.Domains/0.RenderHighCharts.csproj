@@ -7,8 +7,8 @@
     <ProjectGuid>{6074D484-66D5-4FE7-91D2-2FC27D87BDD4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RenderHighCharts.Domain</RootNamespace>
-    <AssemblyName>RenderHighCharts.Domain</AssemblyName>
+    <RootNamespace>RenderHighCharts</RootNamespace>
+    <AssemblyName>RenderHighCharts.Render</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

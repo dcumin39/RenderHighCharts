@@ -1,6 +1,4 @@
-using System.Text;
-
-namespace RenderHighCharts.Domain.Entities
+namespace RenderHighCharts.Entities
 {
 
 

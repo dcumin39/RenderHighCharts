@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 using System.Web;
 using Newtonsoft.Json;
 
-namespace RenderHighCharts.Domain.Entities
+namespace RenderHighCharts.Entities
 {
     public static class HighChartsToJson
     {

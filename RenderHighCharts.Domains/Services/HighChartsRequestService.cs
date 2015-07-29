@@ -1,10 +1,8 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Net;
-using System.Text;
-using RenderHighCharts.Domain.Entities;
+using RenderHighCharts.Entities;
 
-namespace RenderHighCharts.Domain.Services
+namespace RenderHighCharts.Services
 {
     public  class HighChartsRequestService
     {

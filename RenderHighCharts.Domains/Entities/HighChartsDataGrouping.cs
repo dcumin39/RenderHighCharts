@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace RenderHighCharts.Domain.Entities
+namespace RenderHighCharts.Entities
 {
     public class HighChartsDataGrouping
     {

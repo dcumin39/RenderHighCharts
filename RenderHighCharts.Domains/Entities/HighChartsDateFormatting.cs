@@ -1,4 +1,4 @@
-namespace RenderHighCharts.Domain.Entities
+namespace RenderHighCharts.Entities
 {
     public class HighChartsDateFormatting
     {

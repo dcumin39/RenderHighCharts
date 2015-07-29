@@ -3,14 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenderHighCharts", "RenderHighCharts\RenderHighCharts.csproj", "{2E27C569-9298-45A8-A562-B6A9F8DFA0A5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "1.RenderHighCharts.Presentation", "RenderHighCharts\1.RenderHighCharts.Presentation.csproj", "{2E27C569-9298-45A8-A562-B6A9F8DFA0A5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2D5DDA2A-57D4-4FBF-9023-63BA2DE70352}"
 	ProjectSection(SolutionItems) = preProject
 		global.json = global.json
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenderHighCharts.Domain", "RenderHighCharts.Domains\RenderHighCharts.Domain.csproj", "{6074D484-66D5-4FE7-91D2-2FC27D87BDD4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "0.RenderHighCharts", "RenderHighCharts.Domains\0.RenderHighCharts.csproj", "{6074D484-66D5-4FE7-91D2-2FC27D87BDD4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

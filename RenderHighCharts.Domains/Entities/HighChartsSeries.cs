@@ -1,7 +1,6 @@
 using System.Collections;
-using System.Security.AccessControl;
 
-namespace RenderHighCharts.Domain.Entities
+namespace RenderHighCharts.Entities
 {
     public class HighChartsSeries
     {

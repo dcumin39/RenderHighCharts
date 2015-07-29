@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using RenderHighCharts.Domain.Entities;
-using RenderHighCharts.Domain.Services;
+using RenderHighCharts.Entities;
+using RenderHighCharts.Services;
 
 
 namespace RenderHighCharts.Controllers
@@ -53,7 +53,7 @@ namespace RenderHighCharts.Controllers
                 
      
             });
-            
+
             return File(bytes, "image.png");
         }
 
