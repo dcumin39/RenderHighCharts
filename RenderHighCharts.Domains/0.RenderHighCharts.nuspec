@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+
+    <projectUrl>https://github.com/dcumin39/RenderHighCharts/wiki</projectUrl>
+
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>Initial Release</releaseNotes>
+    <copyright>Copyright 2015</copyright>
+    <tags>Highcharts charts graph image reporting reports</tags>
+
+  </metadata>
+</package>

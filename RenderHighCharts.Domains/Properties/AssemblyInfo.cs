@@ -5,14 +5,15 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("RenderHighCharts.Domains")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("RenderHighCharts")]
+[assembly: AssemblyDescription("RenderHighcharts allows for rendering highcharts to image format using http://export.highcharts.com export service. Can be used entirely server")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Dan Cumings")]
 [assembly: AssemblyProduct("RenderHighCharts.Domains")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
