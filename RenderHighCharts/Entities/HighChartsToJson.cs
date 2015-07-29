@@ -12,6 +12,7 @@ namespace RenderHighCharts.Entities
 
 
             NameValueCollection outgoingQueryString = HttpUtility.ParseQueryString(String.Empty);
+            
             outgoingQueryString.Add("async", highcharts.async.ToString());
             outgoingQueryString.Add("content", highcharts.content);
             outgoingQueryString.Add("options", JsonConvert.SerializeObject(highcharts.options).Replace("\"","'"));

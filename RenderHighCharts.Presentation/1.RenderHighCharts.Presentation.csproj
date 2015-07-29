@@ -179,7 +179,7 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RenderHighCharts.Domains\0.RenderHighCharts.csproj">
+    <ProjectReference Include="..\RenderHighCharts\0.RenderHighCharts.csproj">
       <Project>{6074d484-66d5-4fe7-91d2-2fc27d87bdd4}</Project>
       <Name>0.RenderHighCharts</Name>
     </ProjectReference>
