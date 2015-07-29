@@ -13,47 +13,48 @@ namespace RenderHighCharts.Controllers
         public ActionResult Index()
         {
             HighChartsRequestService serivce = new HighChartsRequestService();
-            var btyes = serivce.RequestGraph("image/png", chart: new HighCharts()
+            var bytes = serivce.RequestGraph("image/png", chart: new HighCharts( "Hello World")
 
             {
-                title = new HighChartsTitle() { text = "Hello World" },
+        
                 async = false,
                 content = "options",
                 options = new HighChartsOptions()
                 {
-
+                   
                     yAxis = new HighChartsYAxis()
                     {
                         title = new HighChartsTitle() { text = "test title" }
                     },
                     xAxis = new HighChartsXAxis()
                     {
-                        categories = new List<string> { "Jan", "Feb" }
+                        categories = new List<string> { "Logins", "Applause" }
 
                     },
                     series = new List<HighChartsSeries>{ new HighChartsSeries()
                   {
-                      name="Test",
+                      name="Last Week",
                       type = "column",
-                      data = new List<double> {29.9,5 }
+                      data = new List<double> {29.9,5 },
+                      color="#364852"
                   },
 
                     new HighChartsSeries()
                   {
-                        name = "Test2",
+                        name = "This Week",
                       type = "column",
-                      data = new List<double> {2.9,52 }
+                      data = new List<double> {2.9,52 },
+                      color="#748c9c"
                   }}
 
                 },
                 type = "image/png",
-                constr = "Chart",
-                callback = @"function(chart) { 
-                            chart.setTitle({text:'test'});
-                            }"
+                constr = "Chart"
+                
+     
             });
-            var bytesCount = btyes.Length;
-            return File(btyes.Take(bytesCount - 600).ToArray(), "image.png");
+            
+            return File(bytes, "image.png");
         }
 
 

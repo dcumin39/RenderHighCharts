@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Specialized;
 using System.Text;
-using System.Web;
-using Newtonsoft.Json;
 
 namespace RenderHighCharts.Domain.Entities
 {
@@ -10,6 +6,12 @@ namespace RenderHighCharts.Domain.Entities
 
     public class HighCharts
     {
+        private string _callback  ;
+
+        public HighCharts(string Title)
+        {
+            title = new HighChartsTitle() {text = Title};
+        }
         /// <summary>
         /// Can be of true or false. Default is false.
         ///  When setting async to true a download link is returned to the client, 
@@ -21,7 +23,9 @@ namespace RenderHighCharts.Domain.Entities
             get;
             set;
         } = false;
+
         public HighChartsTitle title { get; set; }
+
         public string content { get; set; }
         /// <summary>
         /// Use this parameter if you want to create a graph out of a Highcharts configuration. 
@@ -58,28 +62,23 @@ namespace RenderHighCharts.Domain.Entities
         /// function(chart)
         /// { chart.renderer.arc(200, 150, 100, 50, -Math.PI, 0).attr({ fill: '#FCFFC5', stroke: 'black', 'stroke-width' : 1 }).add(); }
         /// </summary>
-        public string callback { get; set; }
+        public string callback
+        {
+            get
+            {
+                return
+                    $@"function(chart) {{ 
+                            chart.setTitle({{text:'{title.text}'}});
+                            }};{_callback}";
+            }
+            set { _callback = value; }
+        }
 
-        
     }
 
-    public static class HighChartsToJson
+    public class HighChartsCredits
     {
-        public static string GetSerializedData(this HighCharts highcharts)
-        {
+        public bool enabled { get; set; } = false;
 
-
-            NameValueCollection outgoingQueryString = HttpUtility.ParseQueryString(String.Empty);
-            outgoingQueryString.Add("async", highcharts.async.ToString());
-            outgoingQueryString.Add("content", highcharts.content);
-            outgoingQueryString.Add("options", JsonConvert.SerializeObject(highcharts.options).Replace("\"","'"));
-            outgoingQueryString.Add("type", highcharts.type);
-            outgoingQueryString.Add("width", highcharts.width.ToString());
-            outgoingQueryString.Add("scale", highcharts.scale.ToString());
-            outgoingQueryString.Add("constr", highcharts.constr);
-            outgoingQueryString.Add("callback", highcharts.callback);
-            return outgoingQueryString.ToString();
-
-        }
     }
 }

@@ -75,6 +75,7 @@
     <Compile Include="Entities\HighChartsDateFormatting.cs" />
     <Compile Include="Entities\HighChartsOptions.cs" />
     <Compile Include="Entities\HighChartsSeries.cs" />
+    <Compile Include="Entities\HighChartsToJson.cs" />
     <Compile Include="Entities\HighChartsXAxis.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\HighChartsRequestService.cs" />

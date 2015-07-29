@@ -19,7 +19,9 @@ namespace RenderHighCharts.Domain.Entities
         /// http://api.highcharts.com/highstock#series
         /// </summary>
         public List<HighChartsSeries> series { get; set; }
-     
+
+        public HighChartsCredits credits { get; set; } = new HighChartsCredits();
+
 
     }
 }
