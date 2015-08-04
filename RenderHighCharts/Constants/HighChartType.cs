@@ -20,4 +20,12 @@ namespace RenderHighCharts.Constants
         public const string Scatter = "scatter";
 
     }
+
+    public sealed class HighChartsExportFormat
+    {
+        public const string png = "image/png";
+        public const string jpeg = "image/jpeg";
+        public const string svg = "image/svg+xml";
+        public const string pdf = "application/pdf";
+    }
 }

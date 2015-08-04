@@ -1,3 +1,5 @@
+using RenderHighCharts.Constants;
+
 namespace RenderHighCharts.Entities
 {
 
@@ -34,7 +36,7 @@ namespace RenderHighCharts.Entities
         /// The content-type of the file to output.
         ///  Can be one of 'image/png', 'image/jpeg', 'application/pdf', or 'image/svg+xml'.
         /// </summary>
-        public string type { get; set; }
+        public string type { get; set; } = HighChartsExportFormat.png;
 
         /// <summary>
         /// Set the exact pixel width of the exported image or pdf. 
