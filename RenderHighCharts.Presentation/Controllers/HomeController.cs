@@ -15,12 +15,47 @@ namespace RenderHighCharts.Controllers
         private static Logger logger = LogManager.GetCurrentClassLogger();
         public ActionResult Index()
         {
-            HighChartsRequestService service = new HighChartsRequestService();
-            var highChartsData = GetUserEngagementHighChartsData();
-            logger.Debug(Newtonsoft.Json.JsonConvert.SerializeObject(highChartsData));
-            var bytes = service.RequestGraph("image/png", highChartsData);
+            //HighChartsRequestService service = new HighChartsRequestService();
+            //
+            //logger.Debug(Newtonsoft.Json.JsonConvert.SerializeObject(highChartsData));
+            //var bytes = service.RequestGraph("image/png", highChartsData);
 
-            return File(bytes, "image.png");
+            //return File(bytes, "image.png");
+
+            using (HighChartsRenderServer server= new HighChartsRenderServer())
+            {
+                var highChartsData = GetUserEngagementHighChartsData();
+                var response1 = server.ProcessHighChartsRequest(highChartsData);
+                var response2 = server.ProcessHighChartsRequest(highChartsData);
+                var response3 = server.ProcessHighChartsRequest(highChartsData);
+                var response4 = server.ProcessHighChartsRequest(highChartsData);
+                var response5 = server.ProcessHighChartsRequest(highChartsData);
+                var response6 = server.ProcessHighChartsRequest(highChartsData);
+                var response7 = server.ProcessHighChartsRequest(highChartsData);
+                var response8 = server.ProcessHighChartsRequest(highChartsData);
+                var response9 = server.ProcessHighChartsRequest(highChartsData);
+                var response10 = server.ProcessHighChartsRequest(highChartsData);
+                var response11 = server.ProcessHighChartsRequest(highChartsData);
+                var response12 = server.ProcessHighChartsRequest(highChartsData);
+                var response13 = server.ProcessHighChartsRequest(highChartsData);
+                var response14 = server.ProcessHighChartsRequest(highChartsData);
+                var response15 = server.ProcessHighChartsRequest(highChartsData);
+                var response16 = server.ProcessHighChartsRequest(highChartsData);
+                var response17 = server.ProcessHighChartsRequest(highChartsData);
+                var response18 = server.ProcessHighChartsRequest(highChartsData);
+                var response19 = server.ProcessHighChartsRequest(highChartsData);
+                var response20 = server.ProcessHighChartsRequest(highChartsData);
+                var response21 = server.ProcessHighChartsRequest(highChartsData);
+                var response22 = server.ProcessHighChartsRequest(highChartsData);
+                var response23 = server.ProcessHighChartsRequest(highChartsData);
+                var response24 = server.ProcessHighChartsRequest(highChartsData);
+                var response25 = server.ProcessHighChartsRequest(highChartsData);
+                var response26 = server.ProcessHighChartsRequest(highChartsData);
+                var response27 = server.ProcessHighChartsRequest(highChartsData);
+                var response28 = server.ProcessHighChartsRequest(highChartsData);
+                var response29 = server.ProcessHighChartsRequest(highChartsData);
+                return File(response1, "image.png");
+            }
         }
 
         private static HighCharts GetUserEngagementHighChartsData()

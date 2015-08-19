@@ -167,6 +167,22 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\phantomjs\broken-axis.js" />
+    <Content Include="Scripts\phantomjs\data.js" />
+    <Content Include="Scripts\phantomjs\drilldown.js" />
+    <Content Include="Scripts\phantomjs\funnel.js" />
+    <Content Include="Scripts\phantomjs\heatmap.js" />
+    <Content Include="Scripts\phantomjs\highcharts-3d.js" />
+    <Content Include="Scripts\phantomjs\highcharts-convert.js" />
+    <Content Include="Scripts\phantomjs\highcharts-more.js" />
+    <Content Include="Scripts\phantomjs\highcharts.js" />
+    <Content Include="Scripts\phantomjs\highmaps.js" />
+    <Content Include="Scripts\phantomjs\highstock.js" />
+    <Content Include="Scripts\phantomjs\jquery.1.9.1.min.js" />
+    <Content Include="Scripts\phantomjs\map.js" />
+    <Content Include="Scripts\phantomjs\no-data-to-display.js" />
+    <Content Include="Scripts\phantomjs\solid-gauge.js" />
+    <Content Include="Scripts\phantomjs\treemap.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
@@ -182,6 +198,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Scripts\phantomjs\readme.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
