@@ -55,8 +55,7 @@ namespace RenderHighCharts.Services
 
             var phantomDirectory = AssemblyDirectory;
             var pathRooth = Path.GetPathRoot(phantomDirectory);
-            var phantomJsDirectory = Path.Combine(HttpContext.Current.Server.MapPath($"~/{scriptsDirectory}"),
-                "phantomjs");
+            var phantomJsDirectory = Path.Combine(AssemblyDirectory,  "phantomjs");
 
             var highChartsConvertJsFile = Path.Combine(phantomJsDirectory, "highcharts-convert.js");
 

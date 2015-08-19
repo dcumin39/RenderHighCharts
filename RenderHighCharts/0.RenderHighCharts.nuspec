@@ -11,9 +11,12 @@
 
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Better error logging</releaseNotes>
+    <releaseNotes>Alpha Version of self Contained HighCharts Rendering</releaseNotes>
     <copyright>Copyright 2015</copyright>
     <tags>Highcharts charts graph image reporting reports</tags>
 
   </metadata>
+  <files>
+  <file src="phantomjs\*.*" target="content" /> 
+</files>
 </package>
