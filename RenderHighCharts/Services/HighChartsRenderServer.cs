@@ -28,14 +28,10 @@ namespace RenderHighCharts.Services
     /// </summary>
     public class HighChartsRenderServer : IDisposable
     {
-        private readonly string _port;
-        private readonly string IP;
-        private readonly string PhantomDirectory;
-        private readonly string PhantomJSDirectory;
-        private readonly string PathRooth;
-        private readonly string highChartsConvertJSFile;
+        private string _port;
+        private string _ip;
         private JsonSerializerSettings _jsonSerializerSettings;
-
+        public string TemporaryImagesDirectory { get; set; }
         public static string AssemblyDirectory
         {
             get
@@ -47,97 +43,115 @@ namespace RenderHighCharts.Services
             }
         }
 
-        private Process exeProcess { get; set; }
-        public List<string> CreatedTempFiles { get; set; } 
+        private Process ExeProcess { get; set; }
+        public List<string> CreatedTempFiles { get; set; }
+         
         public HighChartsRenderServer(string ip = "127.0.0.1", string port = "3003",
-            string scriptsDirectory = "scripts")
+            string scriptsDirectory = "scripts", string temporaryFolder= null)
         {
-            CreatedTempFiles = new List<string>();
-            _jsonSerializerSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
-            PhantomDirectory = AssemblyDirectory;
-            PathRooth = Path.GetPathRoot(PhantomDirectory);
-            PhantomJSDirectory = Path.Combine(HttpContext.Current.Server.MapPath($"~/{scriptsDirectory}"),
+            InitServerSerializerAndTmpFileList(ip, port);
+
+            TemporaryImagesDirectory = temporaryFolder ?? Path.GetTempPath();
+
+            var phantomDirectory = AssemblyDirectory;
+            var pathRooth = Path.GetPathRoot(phantomDirectory);
+            var phantomJsDirectory = Path.Combine(HttpContext.Current.Server.MapPath($"~/{scriptsDirectory}"),
                 "phantomjs");
 
-            _port = port;
-            IP = ip;
-            var fileName = "phantomjs.exe";
-            highChartsConvertJSFile = Path.Combine(PhantomJSDirectory, "highcharts-convert.js");
+            var highChartsConvertJsFile = Path.Combine(phantomJsDirectory, "highcharts-convert.js");
+
             string arguments =
-                $" -host {IP} -port {port}";
-            exeProcess = new Process();
-            ProcessStartInfo info = new ProcessStartInfo();
-            info.FileName = "cmd.exe";
-            info.RedirectStandardInput = true;
-            info.RedirectStandardOutput = true;
-            info.UseShellExecute = false;
-            info.Verb = "runas";
-            exeProcess.StartInfo = info;
+                $" -host {_ip} -port {port}";
 
-            exeProcess.Start();
-            using (StreamWriter sw = exeProcess.StandardInput)
+            InitializeCommandProcess();
+
+            using (StreamWriter sw = ExeProcess.StandardInput)
             {
-                if (sw.BaseStream.CanWrite)
-                {
-                    sw.WriteLine($"cd \"{PhantomDirectory}\"");
-                    sw.WriteLine($"{PathRooth.Replace("\\", "")}");
-                    string format = $"{fileName} \"{highChartsConvertJSFile}\" {arguments}";
-                    sw.WriteLine(format);
-
-                }
+                if (!sw.BaseStream.CanWrite) return;
+                sw.WriteLine($"cd \"{phantomDirectory}\"");
+                sw.WriteLine($"{pathRooth.Replace("\\", "")}");
+                string format = $"phantomjs.exe \"{highChartsConvertJsFile}\" {arguments}";
+                sw.WriteLine(format);
             }
 
-            //string output;
-            //using (System.IO.StreamReader myOutput = exeProcess.StandardOutput)
-            //{
-            //    output = myOutput.ReadToEnd();
-            //}
-            //Console.WriteLine(output);
+        }
+
+        private void InitializeCommandProcess()
+        {
+            ExeProcess = new Process();
+            var info = new ProcessStartInfo
+            {
+                FileName = "cmd.exe",
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                Verb = "runas"
+            };
+            ExeProcess.StartInfo = info;
+
+            ExeProcess.Start();
+        }
+
+        private void InitServerSerializerAndTmpFileList(string ip, string port)
+        {
+            _jsonSerializerSettings = new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore};
+            _port = port;
+            _ip = ip;
+            CreatedTempFiles = new List<string>();
         }
 
         public byte[] ProcessHighChartsRequest(HighCharts chart)
         {
-            Guid newGuid = Guid.NewGuid();
+            var newGuid = Guid.NewGuid();
 
-            string outfile = $"C://Temp//{newGuid}.png";
-            HighChartsRenderServerWrapper wrapper = new HighChartsRenderServerWrapper()
+            var temporaryGraphImageFile = Path.Combine(TemporaryImagesDirectory, $"{newGuid}.png");
+
+            var wrapper = new HighChartsRenderServerWrapper()
             {
                 infile = JsonConvert.SerializeObject(chart.options,
                 Formatting.Indented,
                 _jsonSerializerSettings),
                 constr = "Chart",
-                outfile = outfile,
-              //  callback = chart.callback
+                outfile = temporaryGraphImageFile,
+                callback = chart.callback
 
             };
-            HttpWebRequest request =
-                (HttpWebRequest)WebRequest.Create($"http://localhost:{_port}");
-            request.Method = "POST";
-            var postData = JsonConvert.SerializeObject(wrapper, _jsonSerializerSettings);
-            using (var streamWriter = new StreamWriter(request.GetRequestStream()))
-            {
 
-                streamWriter.Write(postData);
-                streamWriter.Flush();
-                streamWriter.Close();
-            }
+            var request = PostToPhantomJs(wrapper);
 
-            using (var response = (HttpWebResponse)request.GetResponse())
+            return ReturnBytesOnSuccess(request, temporaryGraphImageFile);
+        }
+
+        private byte[] ReturnBytesOnSuccess(HttpWebRequest request, string temporaryGraphImageFile)
+        {
+            using (var response = (HttpWebResponse) request.GetResponse())
             {
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    var bytesToReturn = File.ReadAllBytes(outfile);
-                    CreatedTempFiles.Add(outfile);
-                    
+                    var bytesToReturn = File.ReadAllBytes(temporaryGraphImageFile);
+                    CreatedTempFiles.Add(temporaryGraphImageFile);
                     return bytesToReturn;
                 }
             }
 
             return null;
-    
+        }
 
+        private HttpWebRequest PostToPhantomJs(HighChartsRenderServerWrapper wrapper)
+        {
+            var request = (HttpWebRequest) WebRequest.Create($"http://{_ip}:{_port}");
 
+            request.Method = "POST";
 
+            var postData = JsonConvert.SerializeObject(wrapper, _jsonSerializerSettings);
+
+            using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+            {
+                streamWriter.Write(postData);
+                streamWriter.Flush();
+                streamWriter.Close();
+            }
+            return request;
         }
 
         public void Dispose()
@@ -146,10 +160,10 @@ namespace RenderHighCharts.Services
             {
                 File.Delete(createdTempFile);
             }
-            if (!exeProcess.HasExited)
+            if (!ExeProcess.HasExited)
             {
 
-                exeProcess.Kill();
+                ExeProcess.Kill();
             }
         }
 

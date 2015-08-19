@@ -25,36 +25,8 @@ namespace RenderHighCharts.Controllers
             using (HighChartsRenderServer server= new HighChartsRenderServer())
             {
                 var highChartsData = GetUserEngagementHighChartsData();
-                var response1 = server.ProcessHighChartsRequest(highChartsData);
-                var response2 = server.ProcessHighChartsRequest(highChartsData);
-                var response3 = server.ProcessHighChartsRequest(highChartsData);
-                var response4 = server.ProcessHighChartsRequest(highChartsData);
-                var response5 = server.ProcessHighChartsRequest(highChartsData);
-                var response6 = server.ProcessHighChartsRequest(highChartsData);
-                var response7 = server.ProcessHighChartsRequest(highChartsData);
-                var response8 = server.ProcessHighChartsRequest(highChartsData);
-                var response9 = server.ProcessHighChartsRequest(highChartsData);
-                var response10 = server.ProcessHighChartsRequest(highChartsData);
-                var response11 = server.ProcessHighChartsRequest(highChartsData);
-                var response12 = server.ProcessHighChartsRequest(highChartsData);
-                var response13 = server.ProcessHighChartsRequest(highChartsData);
-                var response14 = server.ProcessHighChartsRequest(highChartsData);
-                var response15 = server.ProcessHighChartsRequest(highChartsData);
-                var response16 = server.ProcessHighChartsRequest(highChartsData);
-                var response17 = server.ProcessHighChartsRequest(highChartsData);
-                var response18 = server.ProcessHighChartsRequest(highChartsData);
-                var response19 = server.ProcessHighChartsRequest(highChartsData);
-                var response20 = server.ProcessHighChartsRequest(highChartsData);
-                var response21 = server.ProcessHighChartsRequest(highChartsData);
-                var response22 = server.ProcessHighChartsRequest(highChartsData);
-                var response23 = server.ProcessHighChartsRequest(highChartsData);
-                var response24 = server.ProcessHighChartsRequest(highChartsData);
-                var response25 = server.ProcessHighChartsRequest(highChartsData);
-                var response26 = server.ProcessHighChartsRequest(highChartsData);
-                var response27 = server.ProcessHighChartsRequest(highChartsData);
-                var response28 = server.ProcessHighChartsRequest(highChartsData);
-                var response29 = server.ProcessHighChartsRequest(highChartsData);
-                return File(response1, "image.png");
+                var response = server.ProcessHighChartsRequest(highChartsData);
+                return File(response, "image.png");
             }
         }
 
@@ -133,8 +105,8 @@ namespace RenderHighCharts.Controllers
                     
 
                 },
-                type = HighChartsExportFormat.png,width = 500,scale=null,constr = null,
-                callback = @"function(chart) {                        chart.setTitle({text:''});                            };"
+                type = HighChartsExportFormat.png,width = 500,scale=null,constr = null
+            
 
 
             };
