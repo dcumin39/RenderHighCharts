@@ -28,6 +28,7 @@ namespace RenderHighCharts.Services
     /// </summary>
     public class HighChartsRenderServer : IDisposable
     {
+        private readonly bool _keepAlive;
         private string _port;
         private string _ip;
         private JsonSerializerSettings _jsonSerializerSettings;
@@ -46,19 +47,25 @@ namespace RenderHighCharts.Services
         private Process ExeProcess { get; set; }
         public List<string> CreatedTempFiles { get; set; }
          
-        public HighChartsRenderServer(string ip = "127.0.0.1", string port = "3003", string temporaryFolder= null)
+        public HighChartsRenderServer(string ip = "127.0.0.1", string port = "3003",bool keepAlive=true, string temporaryFolder= null)
         {
+            _keepAlive = keepAlive;
             InitServerSerializerAndTmpFileList(ip, port);
 
             TemporaryImagesDirectory = temporaryFolder ?? Path.GetTempPath();
 
+            StartServer();
+        }
+
+        private void StartServer()
+        {
             var phantomDirectory = HttpContext.Current.Server.MapPath("~/App_Data/phantomjs/");
             var pathRooth = Path.GetPathRoot(phantomDirectory);
 
             var highChartsConvertJsFile = Path.Combine(phantomDirectory, "highcharts-convert.js");
 
             string arguments =
-                $" -host {_ip} -port {port}";
+                $" -host {_ip} -port {_port}";
 
             InitializeCommandProcess();
 
@@ -70,7 +77,6 @@ namespace RenderHighCharts.Services
                 string format = $"phantomjs.exe \"{highChartsConvertJsFile}\" {arguments}";
                 sw.WriteLine(format);
             }
-
         }
 
         private void InitializeCommandProcess()
@@ -99,6 +105,19 @@ namespace RenderHighCharts.Services
 
         public byte[] ProcessHighChartsRequest(HighCharts chart)
         {
+            if (ExeProcess.HasExited)
+            {
+                if (_keepAlive)
+                {
+                    
+                    StartServer();
+                }
+                else
+                {
+                    Dispose();
+                    throw new Exception("could not process.  Server is no longer running and KeepAlive is set to false.");
+                }
+            }
             var newGuid = Guid.NewGuid();
 
             var temporaryGraphImageFile = Path.Combine(TemporaryImagesDirectory, $"{newGuid}.png");

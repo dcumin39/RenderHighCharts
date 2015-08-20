@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -16,7 +17,8 @@ namespace RenderHighCharts.Controllers
         public ActionResult Index()
         {
             var highChartsData = GetUserEngagementHighChartsData();
-
+            var format = highChartsData.options.toJson();   //you can plug this into export.higcharts.com to see what it really should look like.
+            Console.WriteLine( format);
             using (HighChartsRenderServer server = new HighChartsRenderServer())
             {
                 var response = server.ProcessHighChartsRequest(highChartsData);
@@ -33,22 +35,22 @@ namespace RenderHighCharts.Controllers
        
             return new HighCharts("User Engagement")
             {
-
+                
                 async = false,
                 content = "options",
                 title = new HighChartsTitle() { text = "" },
-
+       
                 options = new HighChartsOptions(HighChartType.Spline)
                 {
-
-                   
+                  
+                
                     xAxis = new HighChartsXAxis()
                     {
                         gridLineWidth = 0,
-                        categories = new List<string> {   "Week of 7/25/2015",
-                                                            "Week of 8/1/2015",
-                                                            "Week of 8/8/2015",
-                                                            "Week of 8/15/2015"},
+                        categories = new List<string> {   "1",
+                                                            "2",
+                                                            "3",
+                                                            "4"},
                         labels = new HighChartsAxisLabels()
                         {
                             align = "center",
@@ -70,7 +72,7 @@ namespace RenderHighCharts.Controllers
                         gridLineWidth = 1,
                         labels = new HighChartsAxisLabels()
                         {
-                            align = "center",
+                            align = "right",
                             format = "{value}",
                             formatter = null,
                             autoRotation = "[-45]",
@@ -80,7 +82,7 @@ namespace RenderHighCharts.Controllers
                             x = null
 
                         },
-                        title = new HighChartsTitle() { text = "" },
+                        title = new HighChartsTitle() { text = "test" },
                         gridLineColor = "#8C8C8C",
 
                     },

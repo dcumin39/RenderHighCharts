@@ -11,7 +11,7 @@
 
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Late night bug fixing.</releaseNotes>
+    <releaseNotes>Updated Highchart libraries.  Fixed bugs with y axis label rendering.</releaseNotes>
     <copyright>Copyright 2015</copyright>
     <tags>Highcharts charts graph image reporting reports</tags>
 

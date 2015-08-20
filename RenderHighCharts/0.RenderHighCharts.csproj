@@ -58,7 +58,10 @@
     <Compile Include="Services\HighChartsRequestService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="0.RenderHighCharts.nuspec" />
     <None Include="app.config" />
+    <None Include="nugetpack.bat" />
+    <None Include="nugetpush.bat" />
     <None Include="packages.config" />
     <None Include="phantomjs\readme.md" />
   </ItemGroup>
