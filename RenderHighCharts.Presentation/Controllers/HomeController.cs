@@ -16,19 +16,13 @@ namespace RenderHighCharts.Controllers
         public ActionResult Index()
         {
             var highChartsData = GetUserEngagementHighChartsData();
-            //Option 1: Use an existing export server
-            //HighChartsRequestService service = new HighChartsRequestService();
-            //
-            //logger.Debug(Newtonsoft.Json.JsonConvert.SerializeObject(highChartsData));
-            //var bytes = service.RequestGraph("image/png", highChartsData);
 
-            //return File(bytes, "image.png");
-            //Option 2 use built in Export Server.
-            using (HighChartsRenderServer server= new HighChartsRenderServer())
+            using (HighChartsRenderServer server = new HighChartsRenderServer())
             {
                 var response = server.ProcessHighChartsRequest(highChartsData);
                 return File(response, "image.png");
             }
+
         }
 
         private static HighCharts GetUserEngagementHighChartsData()

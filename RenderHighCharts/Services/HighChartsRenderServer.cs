@@ -46,8 +46,7 @@ namespace RenderHighCharts.Services
         private Process ExeProcess { get; set; }
         public List<string> CreatedTempFiles { get; set; }
          
-        public HighChartsRenderServer(string ip = "127.0.0.1", string port = "3003",
-            string scriptsDirectory = "scripts", string temporaryFolder= null)
+        public HighChartsRenderServer(string ip = "127.0.0.1", string port = "3003", string temporaryFolder= null)
         {
             InitServerSerializerAndTmpFileList(ip, port);
 
@@ -55,9 +54,8 @@ namespace RenderHighCharts.Services
 
             var phantomDirectory = HttpContext.Current.Server.MapPath("~/App_Data/phantomjs/");
             var pathRooth = Path.GetPathRoot(phantomDirectory);
-            var phantomJsDirectory = Path.Combine(AssemblyDirectory,  "phantomjs");
 
-            var highChartsConvertJsFile = Path.Combine(phantomJsDirectory, "highcharts-convert.js");
+            var highChartsConvertJsFile = Path.Combine(phantomDirectory, "highcharts-convert.js");
 
             string arguments =
                 $" -host {_ip} -port {port}";
