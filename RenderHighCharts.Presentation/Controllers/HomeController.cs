@@ -15,12 +15,20 @@ namespace RenderHighCharts.Controllers
         private static Logger logger = LogManager.GetCurrentClassLogger();
         public ActionResult Index()
         {
-            HighChartsRequestService service = new HighChartsRequestService();
             var highChartsData = GetUserEngagementHighChartsData();
-            logger.Debug(Newtonsoft.Json.JsonConvert.SerializeObject(highChartsData));
-            var bytes = service.RequestGraph("image/png", highChartsData);
+            //Option 1: Use an existing export server
+            //HighChartsRequestService service = new HighChartsRequestService();
+            //
+            //logger.Debug(Newtonsoft.Json.JsonConvert.SerializeObject(highChartsData));
+            //var bytes = service.RequestGraph("image/png", highChartsData);
 
-            return File(bytes, "image.png");
+            //return File(bytes, "image.png");
+            //Option 2 use built in Export Server.
+            using (HighChartsRenderServer server= new HighChartsRenderServer())
+            {
+                var response = server.ProcessHighChartsRequest(highChartsData);
+                return File(response, "image.png");
+            }
         }
 
         private static HighCharts GetUserEngagementHighChartsData()
@@ -98,8 +106,8 @@ namespace RenderHighCharts.Controllers
                     
 
                 },
-                type = HighChartsExportFormat.png,width = 500,scale=null,constr = null,
-                callback = @"function(chart) {                        chart.setTitle({text:''});                            };"
+                type = HighChartsExportFormat.png,width = 500,scale=null,constr = null
+            
 
 
             };

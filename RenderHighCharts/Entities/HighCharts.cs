@@ -66,10 +66,7 @@ namespace RenderHighCharts.Entities
         {
             get
             {
-                return
-                    $@"function(chart) {{ 
-                            chart.setTitle({{text:'{title.text}'}});
-                            }};{_callback}";
+                return  $@"function(chart) {{ chart.setTitle({{text:'{title.text}'}}); }};{_callback}";
             }
             set { _callback = value; }
         }
