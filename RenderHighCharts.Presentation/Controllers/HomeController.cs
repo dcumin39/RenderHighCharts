@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -16,19 +17,14 @@ namespace RenderHighCharts.Controllers
         public ActionResult Index()
         {
             var highChartsData = GetUserEngagementHighChartsData();
-            //Option 1: Use an existing export server
-            //HighChartsRequestService service = new HighChartsRequestService();
-            //
-            //logger.Debug(Newtonsoft.Json.JsonConvert.SerializeObject(highChartsData));
-            //var bytes = service.RequestGraph("image/png", highChartsData);
-
-            //return File(bytes, "image.png");
-            //Option 2 use built in Export Server.
-            using (HighChartsRenderServer server= new HighChartsRenderServer())
+            var format = highChartsData.options.toJson();   //you can plug this into export.higcharts.com to see what it really should look like.
+            Console.WriteLine( format);
+            using (HighChartsRenderServer server = new HighChartsRenderServer())
             {
                 var response = server.ProcessHighChartsRequest(highChartsData);
                 return File(response, "image.png");
             }
+
         }
 
         private static HighCharts GetUserEngagementHighChartsData()
@@ -39,32 +35,27 @@ namespace RenderHighCharts.Controllers
        
             return new HighCharts("User Engagement")
             {
-
+                
                 async = false,
                 content = "options",
                 title = new HighChartsTitle() { text = "" },
-
+       
                 options = new HighChartsOptions(HighChartType.Spline)
                 {
-
-                   
+                  
+                
                     xAxis = new HighChartsXAxis()
                     {
                         gridLineWidth = 0,
-                        categories = new List<string> {   "Week of 7/25/2015",
-                                                            "Week of 8/1/2015",
-                                                            "Week of 8/8/2015",
-                                                            "Week of 8/15/2015"},
+                        categories = new List<string> {   "1",
+                                                            "2",
+                                                            "3",
+                                                            "4"},
                         labels = new HighChartsAxisLabels()
                         {
-                            align = "center",
-                            format = "{value}",
-                            formatter = null,
-                            autoRotation = "[-45]",
-                            rotation = null,
-                            style = highChartsStyle,
-                            y = null,
-                            x = null
+               
+                            style = highChartsStyle
+                   
 
                         }
 
@@ -76,17 +67,14 @@ namespace RenderHighCharts.Controllers
                         gridLineWidth = 1,
                         labels = new HighChartsAxisLabels()
                         {
-                            align = "center",
-                            format = "{value}",
-                            formatter = null,
-                            autoRotation = "[-45]",
-                            rotation = null,
-                            style = highChartsStyle,
-                            y = null,
-                            x = null
+                            align = "right",
+                    
+                      
+                            style = highChartsStyle
+                   
 
                         },
-                        title = new HighChartsTitle() { text = "" },
+                        title = new HighChartsTitle() { text = "test" },
                         gridLineColor = "#8C8C8C",
 
                     },

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
@@ -28,6 +29,7 @@ namespace RenderHighCharts.Services
     /// </summary>
     public class HighChartsRenderServer : IDisposable
     {
+        private readonly bool _keepAlive;
         private string _port;
         private string _ip;
         private JsonSerializerSettings _jsonSerializerSettings;
@@ -46,21 +48,25 @@ namespace RenderHighCharts.Services
         private Process ExeProcess { get; set; }
         public List<string> CreatedTempFiles { get; set; }
          
-        public HighChartsRenderServer(string ip = "127.0.0.1", string port = "3003",
-            string scriptsDirectory = "scripts", string temporaryFolder= null)
+        public HighChartsRenderServer(string ip = "127.0.0.1", string port = "3003",bool keepAlive=true, string temporaryFolder= null)
         {
+            _keepAlive = keepAlive;
             InitServerSerializerAndTmpFileList(ip, port);
 
             TemporaryImagesDirectory = temporaryFolder ?? Path.GetTempPath();
 
+            StartServer();
+        }
+
+        private void StartServer()
+        {
             var phantomDirectory = HttpContext.Current.Server.MapPath("~/App_Data/phantomjs/");
             var pathRooth = Path.GetPathRoot(phantomDirectory);
-            var phantomJsDirectory = Path.Combine(AssemblyDirectory,  "phantomjs");
 
-            var highChartsConvertJsFile = Path.Combine(phantomJsDirectory, "highcharts-convert.js");
+            var highChartsConvertJsFile = Path.Combine(phantomDirectory, "highcharts-convert.js");
 
             string arguments =
-                $" -host {_ip} -port {port}";
+                $" -host {_ip} -port {_port}";
 
             InitializeCommandProcess();
 
@@ -71,8 +77,10 @@ namespace RenderHighCharts.Services
                 sw.WriteLine($"{pathRooth.Replace("\\", "")}");
                 string format = $"phantomjs.exe \"{highChartsConvertJsFile}\" {arguments}";
                 sw.WriteLine(format);
+                var readLine = ExeProcess.StandardOutput.ReadLine();
+                Console.WriteLine(readLine);
             }
-
+            
         }
 
         private void InitializeCommandProcess()
@@ -89,6 +97,8 @@ namespace RenderHighCharts.Services
             ExeProcess.StartInfo = info;
 
             ExeProcess.Start();
+        
+
         }
 
         private void InitServerSerializerAndTmpFileList(string ip, string port)
@@ -101,6 +111,19 @@ namespace RenderHighCharts.Services
 
         public byte[] ProcessHighChartsRequest(HighCharts chart)
         {
+            if (ExeProcess.HasExited)
+            {
+                if (_keepAlive)
+                {
+                    
+                    StartServer();
+                }
+                else
+                {
+                    Dispose();
+                    throw new Exception("could not process.  Server is no longer running and KeepAlive is set to false.");
+                }
+            }
             var newGuid = Guid.NewGuid();
 
             var temporaryGraphImageFile = Path.Combine(TemporaryImagesDirectory, $"{newGuid}.png");
@@ -139,11 +162,14 @@ namespace RenderHighCharts.Services
         private HttpWebRequest PostToPhantomJs(HighChartsRenderServerWrapper wrapper)
         {
             var request = (HttpWebRequest) WebRequest.Create($"http://{_ip}:{_port}");
-
+     
             request.Method = "POST";
 
             var postData = JsonConvert.SerializeObject(wrapper, _jsonSerializerSettings);
-
+            if (CreatedTempFiles == null || CreatedTempFiles.Count == 0)
+            {
+                Thread.Sleep(350);
+            }
             using (var streamWriter = new StreamWriter(request.GetRequestStream()))
             {
                 streamWriter.Write(postData);
@@ -163,10 +189,19 @@ namespace RenderHighCharts.Services
             {
 
                 ExeProcess.Kill();
+               
+            }
+
+            KillPhantomJs();
+        }
+        private static void KillPhantomJs()
+        {
+            foreach (var process in Process.GetProcessesByName("phantomjs"))
+            {
+                process.Kill();
             }
         }
 
-       
     }
 }
 

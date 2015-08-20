@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 using RenderHighCharts.Constants;
 
 namespace RenderHighCharts.Entities
@@ -9,8 +10,13 @@ namespace RenderHighCharts.Entities
 
         public HighChartsOptions(string defaultSeriesType) 
         {
-          _chart = new HighChartChart(defaultSeriesType);
+          _chart = new HighChartChart(defaultSeriesType) {marginLeft = 55};
+            
         }
+
+
+        public  HighChartsPlotOptions PlotOptions { get; set; }
+
 
         /// <summary>
         /// http://api.highcharts.com/highstock#xAxis
@@ -36,6 +42,11 @@ namespace RenderHighCharts.Entities
             get { return _chart; }
             set { _chart = value; }
         }
+
+        public string toJson()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
     }
 
     public class HighChartChart
@@ -56,10 +67,7 @@ namespace RenderHighCharts.Entities
         public string borderWidth { get; set; }
 
         public string defaultSeriesType { get; set; } = HighChartType.Line;
-
-  
-
-
-
+        public int marginRight { get; set; }
+        public int marginLeft { get; set; }
     }
 }

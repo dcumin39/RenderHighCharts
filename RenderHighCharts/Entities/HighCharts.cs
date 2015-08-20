@@ -1,9 +1,30 @@
+using Newtonsoft.Json;
 using RenderHighCharts.Constants;
 
 namespace RenderHighCharts.Entities
 {
+    public class HighChartsPlotOptions
+    {
+        public HighChartsSeriesPlotOptions series { get; set; }
+    }
 
+    public class HighChartsSeriesPlotOptions
+    {
+        public bool animation { get; set; }
+        public HighChartsSplinePlotOptions spline { get; set; }
+    }
 
+    public class HighChartsSplinePlotOptions
+    {
+        public HighChartsChartLabelPlotOptions dataLabels { get; set; }
+    }
+
+    public class HighChartsChartLabelPlotOptions
+    {
+        public bool defer { get; set; }
+        public int padding { get; set; }
+        public int x { get; set; }
+    }
     public class HighCharts
     {
         private string _callback  ;
@@ -71,6 +92,10 @@ namespace RenderHighCharts.Entities
             set { _callback = value; }
         }
 
+        public string toJson()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
     }
 
     public class HighChartsCredits

@@ -11,12 +11,13 @@
 
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Self Contained HighCharts Rendering.  No need for a complex phantomjs/tomcat setup.  Phantomjs is included with the nuget package</releaseNotes>
+    <releaseNotes>Better cleanup of phantomjs.exe. </releaseNotes>
     <copyright>Copyright 2015</copyright>
-    <tags>Highcharts charts graph image reporting reports</tags>
+    <tags>Highcharts charts graph image reporting reports.  Also wait 350 ms before making first request(phantomjs randomly complains otherwise)</tags>
 
   </metadata>
 <files>
     <file src="install.ps1" target="tools\install.ps1" /> 
+    <file src="phantomjs/phantomjs.exe" target ="content\phantomjs\phantomjs.exe"/>
 </files>
 </package>
