@@ -11,9 +11,9 @@
 
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Updated Highchart libraries.  Fixed bugs with y axis label rendering.</releaseNotes>
+    <releaseNotes>Better cleanup of phantomjs.exe. </releaseNotes>
     <copyright>Copyright 2015</copyright>
-    <tags>Highcharts charts graph image reporting reports</tags>
+    <tags>Highcharts charts graph image reporting reports.  Also wait 350 ms before making first request(phantomjs randomly complains otherwise)</tags>
 
   </metadata>
 <files>

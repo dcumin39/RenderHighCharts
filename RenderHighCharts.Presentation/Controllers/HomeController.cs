@@ -53,14 +53,9 @@ namespace RenderHighCharts.Controllers
                                                             "4"},
                         labels = new HighChartsAxisLabels()
                         {
-                            align = "center",
-                            format = "{value}",
-                            formatter = null,
-                            autoRotation = "[-45]",
-                            rotation = null,
-                            style = highChartsStyle,
-                            y = null,
-                            x = null
+               
+                            style = highChartsStyle
+                   
 
                         }
 
@@ -73,13 +68,10 @@ namespace RenderHighCharts.Controllers
                         labels = new HighChartsAxisLabels()
                         {
                             align = "right",
-                            format = "{value}",
-                            formatter = null,
-                            autoRotation = "[-45]",
-                            rotation = null,
-                            style = highChartsStyle,
-                            y = null,
-                            x = null
+                    
+                      
+                            style = highChartsStyle
+                   
 
                         },
                         title = new HighChartsTitle() { text = "test" },

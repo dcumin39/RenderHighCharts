@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
@@ -76,7 +77,10 @@ namespace RenderHighCharts.Services
                 sw.WriteLine($"{pathRooth.Replace("\\", "")}");
                 string format = $"phantomjs.exe \"{highChartsConvertJsFile}\" {arguments}";
                 sw.WriteLine(format);
+                var readLine = ExeProcess.StandardOutput.ReadLine();
+                Console.WriteLine(readLine);
             }
+            
         }
 
         private void InitializeCommandProcess()
@@ -93,6 +97,8 @@ namespace RenderHighCharts.Services
             ExeProcess.StartInfo = info;
 
             ExeProcess.Start();
+        
+
         }
 
         private void InitServerSerializerAndTmpFileList(string ip, string port)
@@ -156,11 +162,14 @@ namespace RenderHighCharts.Services
         private HttpWebRequest PostToPhantomJs(HighChartsRenderServerWrapper wrapper)
         {
             var request = (HttpWebRequest) WebRequest.Create($"http://{_ip}:{_port}");
-
+     
             request.Method = "POST";
 
             var postData = JsonConvert.SerializeObject(wrapper, _jsonSerializerSettings);
-
+            if (CreatedTempFiles == null || CreatedTempFiles.Count == 0)
+            {
+                Thread.Sleep(350);
+            }
             using (var streamWriter = new StreamWriter(request.GetRequestStream()))
             {
                 streamWriter.Write(postData);
@@ -180,10 +189,19 @@ namespace RenderHighCharts.Services
             {
 
                 ExeProcess.Kill();
+               
+            }
+
+            KillPhantomJs();
+        }
+        private static void KillPhantomJs()
+        {
+            foreach (var process in Process.GetProcessesByName("phantomjs"))
+            {
+                process.Kill();
             }
         }
 
-       
     }
 }
 
