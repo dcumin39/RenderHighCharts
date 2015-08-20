@@ -11,12 +11,12 @@
 
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Alpha Version of self Contained HighCharts Rendering</releaseNotes>
+    <releaseNotes>Self Contained HighCharts Rendering.  No need for a complex phantomjs/tomcat setup.  Phantomjs is included with the nuget package</releaseNotes>
     <copyright>Copyright 2015</copyright>
     <tags>Highcharts charts graph image reporting reports</tags>
 
   </metadata>
-  <files>
-  <file src="phantomjs\*.*" target="content" /> 
+<files>
+    <file src="install.ps1" target="tools\install.ps1" /> 
 </files>
 </package>

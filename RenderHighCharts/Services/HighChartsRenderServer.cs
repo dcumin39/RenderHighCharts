@@ -53,7 +53,7 @@ namespace RenderHighCharts.Services
 
             TemporaryImagesDirectory = temporaryFolder ?? Path.GetTempPath();
 
-            var phantomDirectory = AssemblyDirectory;
+            var phantomDirectory = HttpContext.Current.Server.MapPath("~/App_Data/phantomjs/");
             var pathRooth = Path.GetPathRoot(phantomDirectory);
             var phantomJsDirectory = Path.Combine(AssemblyDirectory,  "phantomjs");
 
