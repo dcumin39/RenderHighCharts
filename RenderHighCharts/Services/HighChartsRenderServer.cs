@@ -33,6 +33,16 @@ namespace RenderHighCharts.Services
         private string _port;
         private string _ip;
         private JsonSerializerSettings _jsonSerializerSettings;
+        /// <summary>
+        /// Timeout before request should be retried
+        /// </summary>
+        private int TimeoutBeforeRetry;
+
+        /// <summary>
+        /// How many times should the request to generate the chart be retried?
+        /// </summary>
+        private int Maxretries { get; set; }
+
         public string TemporaryImagesDirectory { get; set; }
         public static string AssemblyDirectory
         {
@@ -47,8 +57,8 @@ namespace RenderHighCharts.Services
 
         private Process ExeProcess { get; set; }
         public List<string> CreatedTempFiles { get; set; }
-         
-        public HighChartsRenderServer(string ip = "127.0.0.1", string port = "3003",bool keepAlive=true, string temporaryFolder= null)
+
+        public HighChartsRenderServer(int timeoutBeforeRetry=10000, int maxRetries=4, string ip = "127.0.0.1", string port = "3003", bool keepAlive = true, string temporaryFolder = null)
         {
             _keepAlive = keepAlive;
             InitServerSerializerAndTmpFileList(ip, port);
@@ -56,6 +66,8 @@ namespace RenderHighCharts.Services
             TemporaryImagesDirectory = temporaryFolder ?? Path.GetTempPath();
 
             StartServer();
+            TimeoutBeforeRetry = timeoutBeforeRetry;
+            Maxretries= maxRetries;
         }
 
         private void StartServer()
@@ -80,7 +92,7 @@ namespace RenderHighCharts.Services
                 var readLine = ExeProcess.StandardOutput.ReadLine();
                 Console.WriteLine(readLine);
             }
-            
+
         }
 
         private void InitializeCommandProcess()
@@ -97,13 +109,13 @@ namespace RenderHighCharts.Services
             ExeProcess.StartInfo = info;
 
             ExeProcess.Start();
-        
+
 
         }
 
         private void InitServerSerializerAndTmpFileList(string ip, string port)
         {
-            _jsonSerializerSettings = new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore};
+            _jsonSerializerSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
             _port = port;
             _ip = ip;
             CreatedTempFiles = new List<string>();
@@ -115,7 +127,7 @@ namespace RenderHighCharts.Services
             {
                 if (_keepAlive)
                 {
-                    
+
                     StartServer();
                 }
                 else
@@ -139,44 +151,69 @@ namespace RenderHighCharts.Services
 
             };
 
-            var request = PostToPhantomJs(wrapper);
-
-            return ReturnBytesOnSuccess(request, temporaryGraphImageFile);
+            return PostRequestAndReturnBytesOnSuccess(wrapper, temporaryGraphImageFile);
         }
 
-        private byte[] ReturnBytesOnSuccess(HttpWebRequest request, string temporaryGraphImageFile)
+        private byte[] PostRequestAndReturnBytesOnSuccess(HighChartsRenderServerWrapper wrapper, string temporaryGraphImageFile)
         {
-            using (var response = (HttpWebResponse) request.GetResponse())
-            {
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    var bytesToReturn = File.ReadAllBytes(temporaryGraphImageFile);
-                    CreatedTempFiles.Add(temporaryGraphImageFile);
-                    return bytesToReturn;
-                }
-            }
+            var request = (HttpWebRequest)WebRequest.Create($"http://{_ip}:{_port}");
 
-            return null;
-        }
-
-        private HttpWebRequest PostToPhantomJs(HighChartsRenderServerWrapper wrapper)
-        {
-            var request = (HttpWebRequest) WebRequest.Create($"http://{_ip}:{_port}");
-     
+            request.Timeout = isFirstRun() ? 5000 : TimeoutBeforeRetry;
             request.Method = "POST";
 
             var postData = JsonConvert.SerializeObject(wrapper, _jsonSerializerSettings);
-            if (CreatedTempFiles == null || CreatedTempFiles.Count == 0)
+            if (isFirstRun())
             {
                 Thread.Sleep(350);
             }
-            using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+
+            bool sucess = false;
+            var retries = 0;
+
+            while (retries > Maxretries || sucess != true)
             {
-                streamWriter.Write(postData);
-                streamWriter.Flush();
-                streamWriter.Close();
+                try
+                {
+
+                    using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                    {
+                        streamWriter.Write(postData);
+                        streamWriter.Flush();
+                        streamWriter.Close();
+                    }
+
+                    using (var response = (HttpWebResponse)request.GetResponse())
+                    {
+                        if (response.StatusCode == HttpStatusCode.OK)
+                        {
+                            var bytesToReturn = File.ReadAllBytes(temporaryGraphImageFile);
+                            CreatedTempFiles.Add(temporaryGraphImageFile);
+                            return bytesToReturn;
+                        }
+
+                    }
+
+                    sucess = true;
+                }
+                catch (Exception)
+                {
+                    if (retries + 1 == Maxretries)
+                    {
+                        throw;
+                    }
+                    retries++;
+                }
             }
-            return request;
+            return null;
+
+        }
+
+
+     
+
+        private bool isFirstRun()
+        {
+            return CreatedTempFiles == null || CreatedTempFiles.Count == 0;
         }
 
         public void Dispose()
@@ -189,7 +226,7 @@ namespace RenderHighCharts.Services
             {
 
                 ExeProcess.Kill();
-               
+
             }
 
             KillPhantomJs();

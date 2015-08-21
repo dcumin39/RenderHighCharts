@@ -11,9 +11,9 @@
 
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Better cleanup of phantomjs.exe. </releaseNotes>
+    <releaseNotes>retry request to phantomjs.  It appears that phantomjs will randomly timeout.  If this is the case timeout the request and retry.</releaseNotes>
     <copyright>Copyright 2015</copyright>
-    <tags>Highcharts charts graph image reporting reports.  Also wait 350 ms before making first request(phantomjs randomly complains otherwise)</tags>
+    <tags>Highcharts charts graph image reporting reports</tags>
 
   </metadata>
 <files>

@@ -298,7 +298,7 @@
 						// we have a 5 second timeframe..
 						timer = window.setTimeout(function () {
 							clearInterval(interval);
-							exitCallback('ERROR: While rendering, there\'s is a timeout reached');
+							exitCallback('ERROR: While rendering, there\'s is a TimeoutBeforeRetry reached');
 						}, config.TIMEOUT);
 					} else {
 						// images are loaded, render rightaway
