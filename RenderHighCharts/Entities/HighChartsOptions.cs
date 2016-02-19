@@ -15,7 +15,7 @@ namespace RenderHighCharts.Entities
         }
 
 
-        public  HighChartsPlotOptions PlotOptions { get; set; }
+        public  HighChartsPlotOptions plotOptions { get; set; }
 
 
         /// <summary>

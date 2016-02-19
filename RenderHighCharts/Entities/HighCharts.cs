@@ -6,6 +6,12 @@ namespace RenderHighCharts.Entities
     public class HighChartsPlotOptions
     {
         public HighChartsSeriesPlotOptions series { get; set; }
+        public HighChartsColumnPlotOptions column { get; set; }
+    }
+
+    public class HighChartsColumnPlotOptions
+    {
+        public bool grouping { get; set; } = false;
     }
 
     public class HighChartsSeriesPlotOptions
